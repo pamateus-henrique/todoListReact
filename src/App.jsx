@@ -1,8 +1,12 @@
 import { useState } from "react";
 
+import List from "./List";
+
 function App() {
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editingText, setEditigingText] = useState("");
 
   function handleChange(e) {
     setInputValue(e.target.value);
@@ -20,19 +24,19 @@ function App() {
     setInputValue("");
   }
 
-  function List() {
-    return (
-      <ul>
-        {todos.map((todo) => (
-          <li
-            key={todo.id}
-            className='bg-slate-200 p-2 rounded-sm border border-indigo-300'
-          >
-            {todo.text}
-          </li>
-        ))}
-      </ul>
-    );
+  function handleDelete(id) {
+    const newTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(newTodos);
+  }
+
+  function handleEdit(id) {
+    const toEdit = todos.find((todo) => todo.id === id);
+    setEditigingText(toEdit.text);
+    setEditingId(toEdit.id);
+  }
+
+  function handleSave(id) {
+    console.log(id);
   }
 
   return (
@@ -54,7 +58,15 @@ function App() {
           </button>
         </form>
         <div className='py-4'>
-          <List />
+          <List
+            todos={todos}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            editingId={editingId}
+            editingText={editingText}
+            setEditingText={setEditigingText}
+            onSave={handleSave}
+          />
         </div>
       </div>
     </div>
