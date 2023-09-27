@@ -36,7 +36,12 @@ function App() {
   }
 
   function handleSave(id) {
-    console.log(id);
+    const updateTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, text: editingText } : todo
+    );
+
+    setTodos(updateTodos);
+    setEditingId(null);
   }
 
   return (
