@@ -8,13 +8,17 @@ export default function List({
   editingText,
   setEditingText,
   onSave,
+  onDoubleClick,
 }) {
   return (
     <ul>
       {todos.map((todo) => (
         <li
           key={todo.id}
-          className='bg-slate-200 p-2 my-2 rounded-sm border border-indigo-300 flex justify-between items-center'
+          className={
+            "bg-slate-200 p-2 my-2 rounded-sm border border-indigo-300 flex justify-between items-center"
+          }
+          onDoubleClick={() => onDoubleClick(todo.id)}
         >
           {todo.id === editingId ? (
             <div className='flex justify-between w-full'>
@@ -22,9 +26,10 @@ export default function List({
                 value={editingText}
                 onChange={(e) => setEditingText(e.target.value)}
                 className='bg-slate-200 ring-1 truncate'
+                autoFocus
               />
               <button
-                className='bg-green-400'
+                className='bg-green-400 px-2 focus:ring-1 rounded-sm'
                 onClick={() => onSave(editingId)}
               >
                 Save
@@ -32,7 +37,9 @@ export default function List({
             </div>
           ) : (
             <>
-              <span>{todo.text}</span>
+              <span className={todo.done ? "line-through text-slate-400" : ""}>
+                {todo.text}
+              </span>
 
               <div className='flex space-x-4'>
                 <PencilSquareIcon
