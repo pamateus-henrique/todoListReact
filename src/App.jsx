@@ -7,6 +7,7 @@ function App() {
   const [inputValue, setInputValue] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditigingText] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   function handleChange(e) {
     setInputValue(e.target.value);
@@ -14,6 +15,16 @@ function App() {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    if (!inputValue) {
+      setErrorMessage("You need to actually do something...");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+      return;
+    }
+
+    setErrorMessage("");
 
     const newTodo = {
       id: Date.now(),
@@ -62,6 +73,11 @@ function App() {
             Add
           </button>
         </form>
+        {errorMessage && (
+          <div className='bg-red-200  rounded-sm p mt-2 flex justify-center items-center transiction-opacity'>
+            {errorMessage}
+          </div>
+        )}
         <div className='py-4'>
           <List
             todos={todos}
