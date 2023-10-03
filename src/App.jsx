@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import List from "./List";
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem("todos");
+    if (savedTodos) {
+      return JSON.parse(savedTodos);
+    } else {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
   const [inputValue, setInputValue] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditigingText] = useState("");
@@ -29,6 +41,7 @@ function App() {
     const newTodo = {
       id: Date.now(),
       text: inputValue,
+      done: false,
     };
 
     setTodos([...todos, newTodo]);
@@ -53,6 +66,14 @@ function App() {
 
     setTodos(updateTodos);
     setEditingId(null);
+  }
+
+  function handleDone(id) {
+    console.log(id);
+    const updateTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, done: !todo.done } : todo
+    );
+    setTodos(updateTodos);
   }
 
   return (
@@ -87,6 +108,7 @@ function App() {
             editingText={editingText}
             setEditingText={setEditigingText}
             onSave={handleSave}
+            onDoubleClick={handleDone}
           />
         </div>
       </div>
