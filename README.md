@@ -1,1 +1,1 @@
-Just my project
+Just my todo-app project
